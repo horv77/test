@@ -2,7 +2,7 @@
 function get_mean(data){return(data.reduce((a,b)=>a+b,0)/data.length);}
 function get_limit(data,flag_invert=false){var sum=0;var sumw=0;var data2=nsort(data);for(var i=0;i<data2.length;i++){var x=data2[i];var w=(flag_invert?(i+1):(data2.length-i));sum+=x*w;sumw+=w;}
 var score=sum/sumw;return score;}
-function gen_data(n_min=3,n_max=30,hyp_exp_max=1.5,mul_max=30){var data=[];var flag_hyp=(Math.random()<0.5);var n=Math.floor(Math.random()*(n_max-n_min)+n_min);var k=Math.random()*hyp_exp_max;var flag_minus=(Math.random()<0.5);var mul=Math.pow(mul_max/(flag_hyp?10:1),Math.random());for(var i=0;i<n;i++){if(flag_hyp){var v=1/Math.pow(Math.random(),k)-(flag_minus?1:0);}else{var v=Math.random();}
+function gen_data(n_min=3,n_max=30,hyp_exp_max=2,mul_max=30){var data=[];var flag_hyp=(Math.random()<0.75);var n=Math.floor(Math.random()*(n_max-n_min)+n_min);var k=(hyp_exp_max-0.25)*Math.pow(Math.random(),2)+0.25;var flag_minus=(Math.random()<0.5);var mul=mul_max/(flag_hyp?10:1)*Math.pow(Math.random(),1/3)+1;for(var i=0;i<n;i++){if(flag_hyp){var v=1/Math.pow(Math.random(),k)-(flag_minus?1:0);}else{var v=Math.random();}
 v*=mul;data.push(Math.floor(v));}
 return data;}
 function start(){var out="";var d=gen_data();out+="<p>"+d.join(" &nbsp;")+"</p><hr>";out+="<p>"+nsort(d).join(" &nbsp;")+"</p><hr>";limit_low=get_limit(d);limit_mean=get_mean(d);limit_high=get_limit(d,true);out+="<p>short low &nbsp;"+Math.round(limit_low)+"</p>";out+="<p>long mean &nbsp;"+Math.round(limit_mean)+"</p>";out+="<p>short high &nbsp;"+Math.round(limit_high)+"</p>";output1.innerHTML=out;}
