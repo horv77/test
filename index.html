@@ -5,7 +5,7 @@ function nsort(data){return data.sort(function(a,b){return a-b});}
 function get_mean(data){return(data.reduce((a,b)=>a+b,0)/data.length);}
 function get_limit(data,flag_invert=false){var sum=0;var sumw=0;var data2=nsort(data);for(var i=0;i<data2.length;i++){var x=data2[i];var w=(flag_invert?(i+1):(data2.length-i));sum+=x*w;sumw+=w;}
 var score=sum/sumw;return score;}
-function gen_data(n_min=3,n_max=30,norm_max=100,exp_max=2){var data=[];var n=get_rand(n_min,n_max,true);var mul=get_rand(0,norm_max);var k=get_rand(0,exp_max);var min=null;var max=null;for(var i=0;i<n;i++){var v=Math.random()/Math.pow(Math.random(),k);v=Math.floor(v);data.push(v);if(!min||min>v){min=v;}
+function gen_data(n_min=3,n_max=30,norm_max=100,exp_max=2){var data=[];var n=get_rand(n_min,n_max,true);var mul=get_rand(0,norm_max);var k=get_rand(0,exp_max);var min=null;var max=null;for(var i=0;i<n;i++){var v=mul*Math.random()/Math.pow(Math.random(),k);v=Math.ceil(v);data.push(v);if(!min||min>v){min=v;}
 if(!max||max<v){max=v;}}
 if(max>0&&max<mul){for(var i=0;i<n;i++){data[i]=Math.round(mul*data[i]/max);}}
 return data;}
