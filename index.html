@@ -1,0 +1,8 @@
+<!doctype html><html lang=en><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>test</title><p id=output1></p><style>body{margin:1em}</style><script>function nsort(data){return data.sort(function(a,b){return a-b});}
+function get_mean(data){return(data.reduce((a,b)=>a+b,0)/data.length);}
+function get_limit(data,flag_invert=false){var sum=0;var sumw=0;var data2=nsort(data);for(var i=0;i<data2.length;i++){var x=data2[i];var w=(flag_invert?(i+1):(data2.length-i));sum+=x*w;sumw+=w;}
+var score=sum/sumw;return score;}
+function gen_data(min=3,max=60){var data=[];var k=Math.random()*2;var n=Math.floor(Math.random()*(max-min)+min);for(var i=0;i<n;i++){var v=1/Math.pow(Math.random(),k);data.push(Math.round(v));}
+return data;}
+function start(){var out="";var d=gen_data();out+="<p>"+d.join(" &nbsp;")+"</p><hr>";out+="<p>"+nsort(d).join(" &nbsp;")+"</p><hr>";limit_low=get_limit(d);limit_mean=get_mean(d);limit_high=get_limit(d,true);out+="<p>low &nbsp;"+Math.round(limit_low)+"</p>";out+="<p>mean &nbsp;"+Math.round(limit_mean)+"</p>";out+="<p>high &nbsp;"+Math.round(limit_high)+"</p>";output1.innerHTML=out;}
+document.addEventListener("click",start,true);start();</script>
