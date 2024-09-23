@@ -6,12 +6,12 @@ if(!max||max<v){max=v;}}
 if(max>0&&max<mul){for(var i=0;i<n;i++){data[i]=mul*data[i]/max;}}
 for(var i=0;i<n;i++){data[i]=Math.round(data[i]);}
 return data;}
-function nsort(data){return data.sort(function(a,b){return a-b});}
+function nsort(data){return data.slice().sort((a,b)=>a-b);}
 function get_mean(data){return(data.reduce((a,b)=>a+b,0)/data.length);}
 function get_limit(data,flag_invert=false){var sum=0;var sumw=0;var data2=nsort(data);for(var i=0;i<data2.length;i++){var x=data2[i];var w=(flag_invert?(i+1):(data2.length-i));sum+=x*w;sumw+=w;}
 var score=sum/sumw;return score;}
 function get_limit_time(data,time_exp=null,flag_invert=false,exp=1){if(data.length<1)return null;let sum=0,sumW=0;let data2=data.map((x,i)=>[x,i]).sort((a,b)=>a[0]-b[0]);data2.forEach((x2,i)=>{let x=x2[0],i2=x2[1];let w=flag_invert?(i+1):(data2.length-i);w=Math.pow(w,exp);if(time_exp){let i3=data.length-i2;let w2=Math.pow(i3,-1.0/time_exp);w*=w2;}
 sum+=x*w;sumW+=w;});let score=sum/sumW;return score;}
-function start(){var out="";var d=gen_data();out+="<p>"+d.join(" &nbsp;")+"</p><hr>";out+="<p>"+nsort(d).join(" &nbsp;")+"</p><hr>";limit_low=get_limit(d);limit_mean=get_mean(d);limit_high=get_limit(d,true);k=1
-limit_low_time=get_limit_time(d,k);limit_mean_time=get_limit_time(d,k,false,0);limit_high_time=get_limit_time(d,k,true);out+="<p>short low &nbsp;"+Math.round(limit_low)+"&nbsp;&nbsp;&nbsp; time &nbsp;"+Math.round(limit_low_time)+"</p>";out+="<p>long mean &nbsp;"+Math.round(limit_mean)+"&nbsp;&nbsp;&nbsp; time &nbsp;"+Math.round(limit_mean_time)+"</p>";out+="<p>short high &nbsp;"+Math.round(limit_high)+"&nbsp;&nbsp;&nbsp; time &nbsp;"+Math.round(limit_high_time)+"</p>";output1.innerHTML=out;}
+function start(){var out="";var d=gen_data();out+="<p>"+d.join(" &nbsp;")+"</p><hr>";out+="<p>"+nsort(d).join(" &nbsp;")+"</p><hr>";var limit_low=get_limit(d);var limit_mean=get_mean(d);var limit_high=get_limit(d,true);var k=1
+var limit_low_time=get_limit_time(d,k,false);var limit_mean_time=get_limit_time(d,k,false,0);var limit_high_time=get_limit_time(d,k,true);out+="<p>short low &nbsp;"+Math.round(limit_low)+"&nbsp;&nbsp;&nbsp; time &nbsp;"+Math.round(limit_low_time)+"</p>";out+="<p>long mean &nbsp;"+Math.round(limit_mean)+"&nbsp;&nbsp;&nbsp; time &nbsp;"+Math.round(limit_mean_time)+"</p>";out+="<p>short high &nbsp;"+Math.round(limit_high)+"&nbsp;&nbsp;&nbsp; time &nbsp;"+Math.round(limit_high_time)+"</p>";output1.innerHTML=out;}
 document.addEventListener("click",start,true);start();</script>
