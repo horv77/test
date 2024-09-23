@@ -1,14 +1,14 @@
 <!doctype html><html lang=en><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>test</title><p id=output1></p><style>body{margin:1em}</style><script>function get_rand(n_min,n_max,flag_round=false){if(n_min>n_max){var temp=n_min;n_min=n_max;n_max=temp;}
 var v=Math.random()*(n_max-n_min)+n_min;if(flag_round){v=Math.round(v);}
 return v;}
-function nsort(data){return data.sort(function(a,b){return a-b});}
-function get_mean(data){return(data.reduce((a,b)=>a+b,0)/data.length);}
-function get_limit(data,flag_invert=false){var sum=0;var sumw=0;var data2=nsort(data);for(var i=0;i<data2.length;i++){var x=data2[i];var w=(flag_invert?(i+1):(data2.length-i));sum+=x*w;sumw+=w;}
-var score=sum/sumw;return score;}
 function gen_data(n_min=3,n_max=30,norm_max=30,exp_max=2){var data=[];var n=get_rand(n_min,n_max,true);var mul=get_rand(0,norm_max);var k1=Math.pow(Math.random(),0.5)*exp_max*(Math.random()<0.5?-1:1);var k2=Math.pow(Math.random(),0.5)*exp_max*(Math.random()<0.5?-1:1);var min=null;var max=null;for(var i=0;i<n;i++){var x=Math.random();var v=Math.pow(x,k1)*Math.pow(1-x,1-k2);data.push(v);if(!min||min>v){min=v;}
 if(!max||max<v){max=v;}}
 if(max>0&&max<mul){for(var i=0;i<n;i++){data[i]=mul*data[i]/max;}}
 for(var i=0;i<n;i++){data[i]=Math.round(data[i]);}
 return data;}
+function nsort(data){return data.sort(function(a,b){return a-b});}
+function get_mean(data){return(data.reduce((a,b)=>a+b,0)/data.length);}
+function get_limit(data,flag_invert=false){var sum=0;var sumw=0;var data2=nsort(data);for(var i=0;i<data2.length;i++){var x=data2[i];var w=(flag_invert?(i+1):(data2.length-i));sum+=x*w;sumw+=w;}
+var score=sum/sumw;return score;}
 function start(){var out="";var d=gen_data();out+="<p>"+d.join(" &nbsp;")+"</p><hr>";out+="<p>"+nsort(d).join(" &nbsp;")+"</p><hr>";limit_low=get_limit(d);limit_mean=get_mean(d);limit_high=get_limit(d,true);out+="<p>short low &nbsp;"+Math.round(limit_low)+"</p>";out+="<p>long mean &nbsp;"+Math.round(limit_mean)+"</p>";out+="<p>short high &nbsp;"+Math.round(limit_high)+"</p>";output1.innerHTML=out;}
 document.addEventListener("click",start,true);start();</script>
