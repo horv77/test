@@ -1,1 +1,232 @@
-<!doctype html><html lang=en><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>test</title><p id=output1></p><style>body{margin:1em}</style><script>function h(t=null){let e;if(Array.isArray(t)){e=t}else{let a=[];t=t||Math.floor(Math.random()*(100-5+1))+5;for(let e=0;e<t;e++){let e=Math.floor(Date.now()-Math.random()*(1e6-1e3+1))+1e3;let t=Math.random();let l=Math.log(1/Math.pow(t,1/2)-1)*3+30;l=isFinite(l)?Math.floor(l):0;let n=Math.floor(1/Math.pow(Math.random(),.5));a.push([e,l,n])}e=[...a].sort((e,t)=>e[0]-t[0])}globalThis.d=e;return e}function e(e=null,t=3,l=false){let n=Date.now();let a=h(e);let o=(Date.now()-n)/1e3;let r=i(a,{k:t,rename50224545624680942933:l});let s=(Date.now()-n)/1e3-o;document.getElementById("output1").innerText=`runtime  gen ${O(o)} sec  opt ${O(s)} sec`;return r}function O(e,n=3){let t=Array.isArray(e);let l=t?e:[e];let a=l.map(t=>{let l;if(t===0){l=0}else{let e=Math.pow(10,n-Math.ceil(Math.log10(Math.abs(t))));l=Math.round(t*e)/e}return isNaN(l)?0:l});return t?a:a[0]}function g(e){let n=0,a=0;[...e].sort((e,t)=>e-t).forEach((e,t)=>{let l=t+1;n+=e*l;a+=l});return a===0?0:n/a}function j(e){return e.length===0?0:e.reduce((e,t)=>e+t,0)/e.length}function N(l){return l.length<2?[]:l.slice(1).map((e,t)=>e-l[t])}function d(r,{cost:i=null,k:u=.5,corr:c=1e12}={}){i=i||Math.min(...r.map(e=>e[1]));let f={};let M={};let s=r.length-1;[...r].sort((e,t)=>e[0]-t[0]).forEach(([e,t,l],n)=>{let a=r[n+1]?r[n+1][0]:e;let o=a-e;if(l>0){if(!f[t])f[t]=[];f[t].push([e,l,o])}M[e]=s;s--});let m=null;let b={};for(let h in f){let e=f[h];let a=0,o=0,r=0,s=0;e.forEach(([e,t,l])=>{let n=1/Math.pow(M[e],u);r+=l*n;o+=t*n;a+=1*n;s+=n});r/=s;o/=s;a/=s;let t=e.length/s;let l=h-i;let n=Math.asinh(l*o*c)*2+Math.asinh(a*c)-Math.asinh(r*c)*2;n=isFinite(n)?n:0;b[h]=[n,t];if(!m||m[1]<n)m=[h,n]}let t={};for(let e in b){t[e]=b[e][0]}return[m?m[0]:null,t]}function i(e,{cost:t=null,k:i=2,max_run:l=1e3,rename50224545624680942933:n=false}){let[a,o]=d(e,{cost:t});if(Object.keys(o).length===0)return null;let r=Math.min(...Object.keys(o).map(Number));let u=Math.max(...Object.keys(o).map(Number));r=t&&r>t?t:r;let s=a+(a-r)/2;u=u<s?s:u;let h=Math.min(...Object.values(o));let c=Math.max(...Object.values(o));let f=j(N(Object.values(o).sort((e,t)=>e-t)));let M=c===h?h-1:h-f;let m={};for(let[e,t]of Object.entries(o)){m[e]=t}m[r]=m[r]||M;m[u]=m[u]||M;let b={};for(let[e,t]of Object.entries(m)){t=(t-M)/(c-M);b[e]=Math.pow(t,Math.exp(i));if(isNaN(b[e]))b[e]=0}if(Object.keys(b).length<=1)return null;let p=null;for(let e=0;e<l;e++){let s=Math.random()*(u-r)+r;let h=null;let t=Object.entries(b).sort((e,t)=>e[0]-t[0]);for(let e=1;e<t.length;e++){let[n,a]=t[e-1];let[o,r]=t[e];if(s>=n&&s<=o){if(n===o){h=(a+r)/2}else{let e=Math.abs(o-n);let t=Math.abs(s-o);let l=Math.abs(n-s);h=(a*t+r*l)/(t+l);h=Math.pow(h,Math.exp(i))}if(isNaN(h))h=0;break}}let e=Math.random()*(1-0)+0;if(e<=h){p=s;break}}if(n){console.log(`SCORE ( price, score ): ${Object.entries(o).map(([e,t])=>[e,O(t)])}`);console.log(`SCORE LIMIT LOW: ${O(g(Object.values(o)))}`);console.log(`PRICE MIN MEAN MAX EXTRA: ${O(r)} ${O(j(Object.keys(o).map(Number)))} ${O(u)}`);let n=0,a=0;for(let[t,l]of Object.entries(o)){let e=1/(Math.pow(t-p,2)+1);n+=l*e;a+=e}let e=n/a;console.log(`RANDOM PRICE AND ITS SCORE: ${O(p)} ${O(e)}`)}return p}console.log(e(1e4,false));</script>
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+	<meta charset='utf-8'>
+	<meta name='viewport' content='width=device-width, initial-scale=1'>
+	<title>test</title>
+</head>
+<body>
+
+
+<p id='output1'></p>
+
+
+<style>
+	body {
+		margin: 1em;
+	}
+</style>
+
+
+<script>
+function rename43635879324541028869(n = null) {
+    let res;
+    if (Array.isArray(n)) {
+        res = n;
+    } else {
+        let data = [];
+        n = n || Math.floor(Math.random() * (100 - 5 + 1)) + 5; // Random between 5 and 1e2
+        for (let i = 0; i < n; i++) {
+            let rename27724483687112469782 = Math.floor(Date.now() - Math.random() * (1e6 - 1e3 + 1)) + 1e3;
+            let randValue = Math.random();
+            let price = Math.log(1 / Math.pow(randValue, 1 / 2) - 1) * 3 + 30;
+            price = isFinite(price) ? Math.floor(price) : 0; // Ensure no NaN values
+            let qty = Math.floor(1 / Math.pow(Math.random(), 0.5));
+            data.push([rename27724483687112469782, price, qty]);
+        }
+        res = [...data].sort((a, b) => a[0] - b[0]); // Sort by timestamp, copy before sorting
+    }
+    globalThis.d = res;
+    return res;
+}
+
+function rename14473353363999246579(n = null, k = 3, rename50224545624680942933 = false) {
+    let t0 = Date.now();
+    let data = rename43635879324541028869(n);
+    let t1 = (Date.now() - t0) / 1000;
+    let res = rename73297729091761077462(data, { k, rename50224545624680942933 });
+    let t2 = (Date.now() - t0) / 1000 - t1;
+    //console.log(`runtime  gen ${rename17175382400996089812(t1)} sec  opt ${rename17175382400996089812(t2)} sec`);
+    document.getElementById("output1").innerText = (`runtime  gen ${rename17175382400996089812(t1)} sec  opt ${rename17175382400996089812(t2)} sec`);
+    return res;
+}
+
+function rename17175382400996089812(data, k = 3) {
+    let rename89235980797853498922 = Array.isArray(data);
+    let d = rename89235980797853498922 ? data : [data];
+    let res = d.map(x => {
+        let v;
+        if (x === 0) {
+            v = 0;
+        } else {
+            let scale = Math.pow(10, k - Math.ceil(Math.log10(Math.abs(x))));
+            v = Math.round(x * scale) / scale;
+        }
+        return isNaN(v) ? 0 : v; // Handle NaN results
+    });
+    return rename89235980797853498922 ? res : res[0];
+}
+
+function rename80258489933911304836(data) {
+    let sum = 0, sumw = 0;
+    [...data].sort((a, b) => a - b).forEach((x, i) => { // Copy before sorting
+        let w = i + 1;
+        sum += x * w;
+        sumw += w;
+    });
+    return sumw === 0 ? 0 : sum / sumw;
+}
+
+function rename39678848313793539350(data) {
+    return data.length === 0 ? 0 : data.reduce((a, b) => a + b, 0) / data.length;
+}
+
+function rename27156851904550160401(data) {
+    return data.length < 2 ? [] : data.slice(1).map((x, i) => x - data[i]);
+}
+
+function rename18878903532125546107(data, { cost = null, k = 0.5, corr = 1e12 } = {}) {
+    cost = cost || Math.min(...data.map(x => x[1]));
+    let temp = {};
+    let rename773664173906523591 = {};
+    let index = data.length - 1;
+
+    [...data].sort((a, b) => a[0] - b[0]).forEach(([rename21750068544132234857, price1, qty1], i) => { // Copy before sorting
+        let rename4557333268465897118 = data[i + 1] ? data[i + 1][0] : rename21750068544132234857;
+        let rename9223056430054761342 = rename4557333268465897118 - rename21750068544132234857;
+
+        if (qty1 > 0) {
+            if (!temp[price1]) temp[price1] = [];
+            temp[price1].push([rename21750068544132234857, qty1, rename9223056430054761342]);
+        }
+        rename773664173906523591[rename21750068544132234857] = index;
+        index--;
+    });
+
+    let best = null;
+    let temp2 = {};
+
+    for (let price1 in temp) {
+        let info = temp[price1];
+        let rename65776462160329768851 = 0, rename96573408055771742372 = 0, rename86151430995882181191 = 0, weight_total = 0;
+
+        info.forEach(([rename21750068544132234857, qty1, rename9223056430054761342]) => {
+            let weight = 1.0 / Math.pow(rename773664173906523591[rename21750068544132234857], k);
+            rename86151430995882181191 += rename9223056430054761342 * weight;
+            rename96573408055771742372 += qty1 * weight;
+            rename65776462160329768851 += 1 * weight;
+            weight_total += weight;
+        });
+
+        rename86151430995882181191 /= weight_total;
+        rename96573408055771742372 /= weight_total;
+        rename65776462160329768851 /= weight_total;
+
+        let rename53396424194555441736 = info.length / weight_total;
+        let profit = price1 - cost;
+        let score = Math.asinh(profit * rename96573408055771742372 * corr) * 2
+            + Math.asinh(rename65776462160329768851 * corr)
+            - Math.asinh(rename86151430995882181191 * corr) * 2;
+
+        score = isFinite(score) ? score : 0; // Handle potential NaN
+
+        temp2[price1] = [score, rename53396424194555441736];
+        if (!best || best[1] < score) best = [price1, score];
+    }
+
+    let res = {};
+    for (let price in temp2) {
+        res[price] = temp2[price][0];
+    }
+
+    return [best ? best[0] : null, res];
+}
+
+function rename73297729091761077462(data, { cost = null, k = 2, max_run = 1e3, rename50224545624680942933 = false }) {
+    let [rename27153215533537983098, data2] = rename18878903532125546107(data, { cost });
+    if (Object.keys(data2).length === 0) return null;
+
+    let price_min = Math.min(...Object.keys(data2).map(Number));
+    let price_max = Math.max(...Object.keys(data2).map(Number));
+    price_min = cost && price_min > cost ? cost : price_min;
+    let rename78484860045173386990 = rename27153215533537983098 + (rename27153215533537983098 - price_min) / 2.0;
+    price_max = price_max < rename78484860045173386990 ? rename78484860045173386990 : price_max;
+
+    let score_min = Math.min(...Object.values(data2));
+    let score_max = Math.max(...Object.values(data2));
+    let rename11245274059354793556 = rename39678848313793539350(rename27156851904550160401(Object.values(data2).sort((a, b) => a - b)));
+    let rename97246848652567048497 = score_max === score_min ? score_min - 1 : score_min - rename11245274059354793556;
+
+    let data3 = {};
+    for (let [price, score] of Object.entries(data2)) {
+        data3[price] = score;
+    }
+    data3[price_min] = data3[price_min] || rename97246848652567048497;
+    data3[price_max] = data3[price_max] || rename97246848652567048497;
+
+    let data4 = {};
+    for (let [price, score] of Object.entries(data3)) {
+        score = (score - rename97246848652567048497) / (score_max - rename97246848652567048497);
+        data4[price] = Math.pow(score, Math.exp(k));
+        if (isNaN(data4[price])) data4[price] = 0; // Handle NaN during exponential
+    }
+
+    if (Object.keys(data4).length <= 1) return null;
+
+    let res = null;
+    for (let i = 0; i < max_run; i++) {
+        let rename84402087101441321632 = Math.random() * (price_max - price_min) + price_min;
+
+        let rename97699325403549457233 = null;
+        let sortedData4 = Object.entries(data4).sort((a, b) => a[0] - b[0]);
+        for (let j = 1; j < sortedData4.length; j++) {
+            let [price1, score1] = sortedData4[j - 1];
+            let [price2, score2] = sortedData4[j];
+            if (rename84402087101441321632 >= price1 && rename84402087101441321632 <= price2) {
+                if (price1 === price2) {
+                    rename97699325403549457233 = (score1 + score2) / 2;
+                } else {
+                    let rename31514220007085533831 = Math.abs(price2 - price1);
+                    let w1 = Math.abs(rename84402087101441321632 - price2);
+                    let w2 = Math.abs(price1 - rename84402087101441321632);
+                    rename97699325403549457233 = (score1 * w1 + score2 * w2) / (w1 + w2);
+                    rename97699325403549457233 = Math.pow(rename97699325403549457233, Math.exp(k));
+                }
+                if (isNaN(rename97699325403549457233)) rename97699325403549457233 = 0; // Handle NaN
+                break;
+            }
+        }
+
+        let r = Math.random() * (1 - 0) + 0;
+        if (r <= rename97699325403549457233) {
+            res = rename84402087101441321632;
+            break;
+        }
+    }
+
+    if (rename50224545624680942933) {
+        console.log(`SCORE ( price, score ): ${Object.entries(data2).map(([p, s]) => [p, rename17175382400996089812(s)])}`);
+        console.log(`SCORE LIMIT LOW: ${rename17175382400996089812(rename80258489933911304836(Object.values(data2)))}`);
+        console.log(`PRICE MIN MEAN MAX EXTRA: ${rename17175382400996089812(price_min)} ${rename17175382400996089812(rename39678848313793539350(Object.keys(data2).map(Number)))} ${rename17175382400996089812(price_max)}`);
+        let sum = 0, sumw = 0;
+        for (let [price, score] of Object.entries(data2)) {
+            let w = 1 / (Math.pow(price - res, 2) + 1);
+            sum += score * w;
+            sumw += w;
+        }
+        let rename30719648269983693819 = sum / sumw;
+        console.log(`RANDOM PRICE AND ITS SCORE: ${rename17175382400996089812(res)} ${rename17175382400996089812(rename30719648269983693819)}`);
+    }
+
+    return res;
+}
+
+// Example usage
+console.log(rename14473353363999246579(1e4, false));
+
+</script>
+
+
+</body>
+</html>
